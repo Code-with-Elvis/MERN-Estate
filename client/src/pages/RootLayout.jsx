@@ -1,3 +1,4 @@
+import Footer from "@/components/global/Footer";
 import Header from "@/components/header/Header";
 import { Outlet } from "react-router-dom";
 
@@ -8,6 +9,7 @@ const RootLayout = () => {
       <main className="content-height">
         <Outlet />
       </main>
+      <Footer />
     </>
   );
 };
