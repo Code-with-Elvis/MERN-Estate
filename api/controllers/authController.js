@@ -3,8 +3,8 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
 const signUp = catchAsync(async (req, res) => {
-  const { username, email, password } = req.body;
-  const newUser = await User.create({ username, email, password });
+  const { username, name, email, password } = req.body;
+  const newUser = await User.create({ username, name, email, password });
   res.status(201).json({
     status: "success",
     data: {
