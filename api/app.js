@@ -1,5 +1,6 @@
 const express = require("express");
 const userRouter = require("./routes/userRoute");
+const globalErrorHandler = require("./controllers/errorController");
 
 const app = express();
 
@@ -16,5 +17,8 @@ app.get("/", (req, res) => {
     },
   });
 });
+
+// GLOBAL ERROR HANDLING MIDDLEWARE
+app.use(globalErrorHandler);
 
 module.exports = app;
