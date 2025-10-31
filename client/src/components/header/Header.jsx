@@ -17,7 +17,7 @@ const Header = () => {
       <div className="container relative h-full flex items-center justify-between">
         {/* Header content right */}
         <SmallNav />
-        <div className="hidden sm:flex items-center space-x-7 text-sm font-semibold uppercase">
+        <div className="hidden sm:flex items-center space-x-7 text-sm  uppercase">
           <Link to="/">Home</Link>
           <Link to="/about">About</Link>
           <Link to="/listings">Listings</Link>
