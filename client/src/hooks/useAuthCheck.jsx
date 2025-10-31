@@ -13,7 +13,7 @@ const useAuthCheck = () => {
     const checkUser = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("/api/v1/auth/me", {
+        const res = await axios.get("/api/v1/users/auth/me", {
           withCredentials: true,
         });
 

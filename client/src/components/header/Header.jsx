@@ -3,14 +3,10 @@ import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import SmallNav from "./SmallNav";
 import UserProfile from "./UserProfile";
+import { useAuth } from "@/store";
 
 const Header = () => {
-  //   const user = {
-  //     name: "John Doe",
-  //     id: "12345",
-  //     image: "https://github.com/shadcn.png",
-  //   };
-  const user = null;
+  const user = useAuth((state) => state.user);
 
   return (
     <header className="bg-foreground h-18 text-white">
