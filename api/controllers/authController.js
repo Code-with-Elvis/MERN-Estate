@@ -102,8 +102,22 @@ const protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+const logout = (req, res) => {
+  res.cookie("jwt", "loggedout", {
+    expires: new Date(Date.now() + 10 * 1000), // == expires in 10 seconds ==
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production" ? true : false,
+  });
+
+  res.status(200).json({
+    status: "success",
+    message: "User logged out successfully",
+  });
+};
+
 module.exports = {
   signUp,
   signIn,
   protect,
+  logout,
 };
