@@ -12,7 +12,7 @@ const useLogOut = () => {
   const { mutate: logOut, isPending } = useMutation({
     mutationFn: async () => {
       const response = await axios.post(
-        "/api/v1/auth/logout",
+        "/api/v1/users/auth/logout",
         {},
         {
           headers: {
@@ -26,7 +26,7 @@ const useLogOut = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success("Logout successful!");
-      navigate("/login");
+      navigate("/");
       logout();
     },
     onError: (error) => {
