@@ -8,7 +8,6 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import GoogleAuthButton from "@/components/global/GoogleAuthButton";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
@@ -16,8 +15,9 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Check, Eye, EyeOff } from "lucide-react";
+import { Check, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
+import useCreateUser from "@/hooks/useCreateUser";
 
 const signUpSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters long"),
@@ -63,8 +63,10 @@ const SignUp = () => {
     .safeParse(name).success;
   const isUsernameValid = z.string().min(3).max(30).safeParse(username).success;
 
+  const { createUser, isPending } = useCreateUser("/api/v1/users/signup");
+
   const onSubmit = (data) => {
-    console.log(data);
+    createUser(data);
   };
 
   return (
@@ -211,9 +213,16 @@ const SignUp = () => {
                   type="submit"
                   size={"lg"}
                   aria-label="Sign In"
+                  disabled={isPending}
                   className="w-full uppercase disabled:cursor-not-allowed  text-white py-2 hover:scale-[1.02] active:scale-[1]  transition duration-100 disabled:bg-neutral-300 disabled:text-neutral-500"
                 >
-                  Sign Up
+                  {isPending ? (
+                    <>
+                      <Loader2 className="animate-spin" /> Loading...
+                    </>
+                  ) : (
+                    "Sign Up"
+                  )}
                 </Button>
                 <p className="text-center text-sm text-neutral-600 font-poppins dark:text-neutral-300">
                   Have an account?{" "}

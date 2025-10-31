@@ -15,4 +15,16 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    host: "0.0.0.0",
+    port: 5173, // You can specify any port you prefer
+    proxy: {
+      // Proxy API requests starting with /api to your backend server
+      "/api": {
+        target: "http://localhost:8800", // Replace with your backend server URL
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 });
