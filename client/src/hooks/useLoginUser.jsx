@@ -1,3 +1,4 @@
+import { useAuth } from "@/store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +7,7 @@ import { toast } from "sonner";
 const useLoginUser = (apiUrl) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const login = useAuth((state) => state.login);
 
   const { mutate: loginUser, isPending } = useMutation({
     mutationFn: async (userData) => {
@@ -20,7 +22,7 @@ const useLoginUser = (apiUrl) => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success("Login successful!");
       navigate("/");
-      console.log("Success:", data);
+      login(data.data.user, data.token);
     },
     onError: (error) => {
       console.error("Error:", error?.message || "An error occurred");
