@@ -6,3 +6,4 @@ export { default as Profile } from "./Profile";
 export { default as Listings } from "./Listings";
 export { default as RootLayout } from "./RootLayout";
 export { default as List } from "./List";
+export { default as Settings } from "./Settings";

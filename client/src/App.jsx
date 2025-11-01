@@ -11,6 +11,7 @@ import {
   Listings,
   Profile,
   RootLayout,
+  Settings,
   SignIn,
   SignUp,
 } from "./pages";
@@ -34,6 +35,7 @@ const router = createBrowserRouter(
         <Route path="profile/:id" element={<Profile />} />
         <Route path="listings" element={<Listings />} />
         <Route path="listings/:slug" element={<List />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
       {/* Protected (admin-only) routes */}
       <Route element={<ProtectedRoute />}>
