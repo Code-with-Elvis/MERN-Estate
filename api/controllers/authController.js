@@ -58,6 +58,56 @@ const signIn = catchAsync(async (req, res, next) => {
   });
 });
 
+const googleSignUp = catchAsync(async (req, res, next) => {
+  const { name, email, photo } = req.body;
+
+  // == Check if user already exists ==
+
+  let user = await User.findOne({ email });
+
+  if (!user) {
+    const generateRandomPassword = (length = 12) => {
+      const chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?";
+      let password = "";
+      for (let i = 0; i < length; i++) {
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return password;
+    };
+
+    const username = email.replace(/\..+/, "").toLowerCase();
+
+    user = await User.create({
+      username,
+      name,
+      email,
+      photo,
+      password: generateRandomPassword(),
+    });
+  }
+
+  const token = createJWT(user._id);
+
+  // === Set cookie ===
+
+  res.cookie("jwt", token, {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    secure: process.env.NODE_ENV === "production" ? true : false,
+    httpOnly: true,
+  });
+
+  res.status(201).json({
+    status: "success",
+    token,
+    data: {
+      user,
+    },
+  });
+});
+
 const protect = catchAsync(async (req, res, next) => {
   // === Getting token and check if it's there ===
   let token;
@@ -120,4 +170,5 @@ module.exports = {
   signIn,
   protect,
   logout,
+  googleSignUp,
 };

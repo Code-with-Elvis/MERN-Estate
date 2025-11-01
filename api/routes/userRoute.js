@@ -9,6 +9,7 @@ const {
   signIn,
   protect,
   logout,
+  googleSignUp,
 } = require("../controllers/authController");
 
 const router = express.Router();
@@ -18,5 +19,6 @@ router.route("/signup").post(signUp);
 router.route("/signin").post(signIn);
 router.route("/auth/me").get(protect, getMe, getUser);
 router.route("/auth/logout").post(logout);
+router.post("/auth/google", googleSignUp);
 
 module.exports = router;
