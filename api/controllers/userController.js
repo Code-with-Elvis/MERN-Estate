@@ -38,11 +38,11 @@ const getUser = catchAsync(async (req, res, next) => {
 });
 
 const updateMe = catchAsync(async (req, res, next) => {
-  const { name, username } = req.body;
+  const { name, username, photo } = req.body;
 
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
-    { name, username },
+    { name, username, photo },
     { new: true, runValidators: true }
   );
 
