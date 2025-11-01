@@ -6,10 +6,12 @@ import {
 } from "react-router-dom";
 import {
   About,
+  Favorites,
   Home,
   List,
   Listings,
   Profile,
+  ProfileLayout,
   RootLayout,
   Settings,
   SignIn,
@@ -32,7 +34,10 @@ const router = createBrowserRouter(
       </Route>
       {/* Private (logged-in) routes */}
       <Route element={<PrivateRoute />}>
-        <Route path="profile/:id" element={<Profile />} />
+        <Route path="profile/:id" element={<ProfileLayout />}>
+          <Route index element={<Profile />} />
+          <Route path="favorites" element={<Favorites />} />
+        </Route>
         <Route path="listings" element={<Listings />} />
         <Route path="listings/:slug" element={<List />} />
         <Route path="settings" element={<Settings />} />
