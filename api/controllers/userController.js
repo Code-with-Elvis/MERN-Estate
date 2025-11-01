@@ -37,8 +37,57 @@ const getUser = catchAsync(async (req, res, next) => {
   });
 });
 
+const updateMe = catchAsync(async (req, res, next) => {
+  const { name, username } = req.body;
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    { name, username },
+    { new: true, runValidators: true }
+  );
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      user: updatedUser,
+    },
+  });
+});
+
+const updatePassword = catchAsync(async (req, res, next) => {
+  const { currentPassword, newPassword } = req.body;
+
+  if (!currentPassword || !newPassword) {
+    return next(
+      new AppError("Please provide both current and new passwords", 400)
+    );
+  }
+
+  const user = await User.findById(req.user.id).select("+password");
+
+  if (!(await user.correctPassword(currentPassword, user.password))) {
+    return next(new AppError("Your current password is wrong.", 401));
+  }
+
+  user.password = newPassword;
+  await user.save();
+
+  // === Remove password from output ===
+
+  user.password = undefined;
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      user,
+    },
+  });
+});
+
 module.exports = {
   getAllUsers,
   getMe,
   getUser,
+  updateMe,
+  updatePassword,
 };
