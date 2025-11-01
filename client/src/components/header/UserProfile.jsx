@@ -22,7 +22,7 @@ const UserProfile = ({ user }) => {
           </span>
           <Avatar className="size-9">
             <AvatarImage
-              src={user.photo}
+              src={user?.photo}
               className="w-full h-full object-cover"
             />
             <AvatarFallback className="text-foreground font-semibold">
