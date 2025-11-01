@@ -22,10 +22,6 @@ const accountSchema = z.object({
       "Full name must contain exactly two names"
     ),
   email: z.email("Invalid email address"),
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/, "Weak password"),
 });
 
 const Account = () => {
@@ -106,25 +102,6 @@ const Account = () => {
             {errors.email && (
               <p className="text-xs font-medium ml-1 mt-1 text-red-500">
                 * {errors.email.message}
-              </p>
-            )}
-          </div>
-          <div className="mb-2.5">
-            <Label htmlFor="password" className="text-sm ml-1 mb-1">
-              Password
-            </Label>
-            <Input
-              type="text"
-              id="password"
-              placeholder="e.g John Doe"
-              {...register("password")}
-              className={`py-5 ${
-                errors.password ? "border-red-400" : "border-neutral-300"
-              }`}
-            />
-            {errors.password && (
-              <p className="text-xs font-medium ml-1 mt-1 text-red-500">
-                * {errors.password.message}
               </p>
             )}
           </div>
