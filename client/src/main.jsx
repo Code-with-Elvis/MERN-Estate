@@ -16,7 +16,7 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById("root")).render(
   <QueryClientProvider client={queryClient}>
-    <Toaster position="top-right" richColors />
+    <Toaster position="bottom-right" richColors />
     <App />
   </QueryClientProvider>
 );

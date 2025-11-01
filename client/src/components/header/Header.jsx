@@ -20,7 +20,7 @@ const Header = () => {
         </div>
 
         {/* Header center logo */}
-        <div className="relative sm:absolute sm:left-1/2  sm:top-4 sm:transform sm:-translate-x-1/2">
+        <div className="relative sm:absolute sm:left-1/2  sm:top-4 sm:transform sm:-translate-x-1/2 z-40">
           <Link to="/" className="inline-block">
             <Logo className=" mt-1 sm:mt-0 h-12 sm:h-24 text-primary" />
           </Link>
