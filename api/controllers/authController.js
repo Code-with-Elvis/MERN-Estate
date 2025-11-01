@@ -11,8 +11,8 @@ const createJWT = (userId) => {
 };
 
 const signUp = catchAsync(async (req, res) => {
-  const { username, name, email, password } = req.body;
-  const newUser = await User.create({ username, name, email, password });
+  const { username, name, email, password, photo } = req.body;
+  const newUser = await User.create({ username, name, email, password, photo });
   res.status(201).json({
     status: "success",
     data: {
