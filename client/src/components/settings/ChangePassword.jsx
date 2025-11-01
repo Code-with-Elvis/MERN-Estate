@@ -11,6 +11,8 @@ import {
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import useUpdateItem from "@/hooks/useUpdateItem";
+import { Loader2 } from "lucide-react";
 
 const passwordSchema = z
   .object({
@@ -24,7 +26,7 @@ const passwordSchema = z
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/, "Weak password"),
     confirmPassword: z.string().min(6, "This field is required"),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Passwords must match",
     path: ["confirmPassword"], // 👈 This tells Zod where to show the error
   });
@@ -36,8 +38,16 @@ const ChangePassword = () => {
     formState: { errors },
   } = useForm({ resolver: zodResolver(passwordSchema), mode: "onSubmit" });
 
+  const { updateItem, isPending } = useUpdateItem(
+    "/api/v1/users/me/update-password",
+    "users",
+    "Password updated successfully"
+  );
+
   const onSubmit = (data) => {
-    console.log(data);
+    // == Remove confirm password ==
+    const { confirmPassword: _confirmPassword, ...rest } = data;
+    updateItem(rest);
   };
 
   return (
@@ -60,7 +70,7 @@ const ChangePassword = () => {
               Current Password
             </Label>
             <Input
-              type="text"
+              type="password"
               id="currentPassword"
               placeholder="******"
               {...register("currentPassword")}
@@ -80,7 +90,7 @@ const ChangePassword = () => {
               New Password
             </Label>
             <Input
-              type="text"
+              type="password"
               id="newPassword"
               placeholder="*******"
               {...register("newPassword")}
@@ -99,7 +109,7 @@ const ChangePassword = () => {
               Confirm Password
             </Label>
             <Input
-              type="text"
+              type="password"
               id="confirmPassword"
               placeholder="*******"
               {...register("confirmPassword")}
@@ -115,8 +125,14 @@ const ChangePassword = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="uppercase ">
-            Update Password
+          <Button disabled={isPending} type="submit" className="uppercase">
+            {isPending ? (
+              <>
+                <Loader2 className="animate-spin" /> Updating...
+              </>
+            ) : (
+              "Update Password"
+            )}
           </Button>
         </CardFooter>
       </Card>
