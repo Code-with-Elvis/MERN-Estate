@@ -102,6 +102,43 @@ const deactivateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+const deleteMe = catchAsync(async (req, res, next) => {
+  // === Find user ===
+  const password = req?.body?.password || "";
+
+  if (!password) {
+    return next(
+      new AppError("Please provide your password to delete account.", 400)
+    );
+  }
+
+  const user = await User.findById(req.user.id).select("+password");
+
+  // === If password is incorrect ===
+
+  if (!(await user.correctPassword(password, user.password))) {
+    return next(new AppError("Your password is incorrect.", 400));
+  }
+
+  // === Delete user ===
+
+  await User.findByIdAndDelete(req.user.id);
+
+  // === Log user out ===
+  res.cookie("jwt", "loggedout", {
+    expires: new Date(Date.now() + 10 * 1000), // == expires in 10 seconds ==
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production" ? true : false,
+  });
+
+  // === Send response ===
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});
+
 module.exports = {
   getAllUsers,
   getMe,
@@ -109,4 +146,5 @@ module.exports = {
   updateMe,
   updatePassword,
   deactivateMe,
+  deleteMe,
 };

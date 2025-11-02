@@ -6,6 +6,7 @@ const {
   updateMe,
   updatePassword,
   deactivateMe,
+  deleteMe,
 } = require("../controllers/userController");
 const {
   signUp,
@@ -17,7 +18,6 @@ const {
 } = require("../controllers/authController");
 
 const router = express.Router();
-const app = express();
 
 router.route("/").get(getAllUsers);
 router.route("/signup").post(signUp);
@@ -31,5 +31,6 @@ router
   .route("/me/update-password")
   .patch(protect, mustBeActive, updatePassword);
 router.route("/me/deactivate").delete(protect, deactivateMe);
+router.route("/me/delete").delete(protect, mustBeActive, deleteMe);
 
 module.exports = router;
