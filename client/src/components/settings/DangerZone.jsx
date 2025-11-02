@@ -13,18 +13,27 @@ import {
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useState } from "react";
-import { Loader, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useAuth } from "@/store";
 import useDeleteItem from "@/hooks/useDeleteItem";
+import { ref as storageRef, deleteObject } from "firebase/storage";
+import { storage } from "@/firebase";
 
 function DangerZone() {
   const [password, setPassword] = useState("");
   const user = useAuth((state) => state.user);
   const login = useAuth((state) => state.login);
+  const logout = useAuth((state) => state.logout);
   const { deleteItem, isPending } = useDeleteItem(
     "/api/v1/users/me/deactivate",
     "users",
     "Account status updated successfully"
+  );
+
+  const { deleteItem: deleteAccount, isPending: isDeleting } = useDeleteItem(
+    "/api/v1/users/me/delete",
+    "users",
+    "Account deleted successfully"
   );
 
   const deactivateMe = () => {
@@ -36,6 +45,35 @@ function DangerZone() {
         },
       }
     );
+  };
+
+  const deleteMe = () => {
+    deleteAccount(
+      { password },
+      {
+        onSuccess: () => {
+          logout();
+          setPassword("");
+
+          // === Delete profile picture from firebase  ===
+
+          const oldPhoto = user?.photo;
+
+          if (oldPhoto && !oldPhoto.includes("flaticon.com")) {
+            cleanupOldImage(oldPhoto);
+          }
+        },
+      }
+    );
+  };
+
+  const cleanupOldImage = async (imageUrl) => {
+    try {
+      const imageRef = storageRef(storage, imageUrl);
+      await deleteObject(imageRef);
+    } catch (error) {
+      console.error("Error deleting old image:", error);
+    }
   };
 
   return (
@@ -71,8 +109,19 @@ function DangerZone() {
 
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive" className=" bg-red-400">
-              Delete account
+            <Button
+              disabled={isDeleting}
+              variant="destructive"
+              className=" bg-red-400"
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className="animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                "Delete account"
+              )}
             </Button>
           </AlertDialogTrigger>
 
@@ -110,9 +159,13 @@ function DangerZone() {
                 Cancel
               </AlertDialogCancel>
               <AlertDialogAction asChild>
-                <Button variant="destructive" disabled={isPending}>
-                  {isPending && (
-                    <Loader className="mr-2 h-4 w-4 animate-spin" />
+                <Button
+                  variant="destructive"
+                  disabled={isDeleting}
+                  onClick={deleteMe}
+                >
+                  {isDeleting && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
                   Delete account
                 </Button>
