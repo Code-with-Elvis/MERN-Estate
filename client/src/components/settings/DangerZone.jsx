@@ -13,11 +13,31 @@ import {
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useState } from "react";
-import { Loader } from "lucide-react";
+import { Loader, Loader2 } from "lucide-react";
+import { useAuth } from "@/store";
+import useDeleteItem from "@/hooks/useDeleteItem";
 
 function DangerZone() {
   const [password, setPassword] = useState("");
-  const isPending = false;
+  const user = useAuth((state) => state.user);
+  const login = useAuth((state) => state.login);
+  const { deleteItem, isPending } = useDeleteItem(
+    "/api/v1/users/me/deactivate",
+    "users",
+    "Account status updated successfully"
+  );
+
+  const deactivateMe = () => {
+    deleteItem(
+      { delete: true },
+      {
+        onSuccess: (data) => {
+          login({ ...user, active: data.data.data.active });
+        },
+      }
+    );
+  };
+
   return (
     <div className="mt-10">
       <h2 className="mb-6 text-xl font-bold">Deactivation & Deletion</h2>
@@ -28,9 +48,14 @@ function DangerZone() {
         </p>
         <Button
           variant="destructive"
-          className=" bg-yellow-600 font-bold disabled:cursor-not-allowed"
+          disabled={isPending}
+          className={` ${
+            user.active ? "bg-yellow-600" : "bg-green-600"
+          } font-bold disabled:cursor-not-allowed`}
+          onClick={deactivateMe}
         >
-          Deactivate account
+          {isPending && <Loader2 className="animate-spin" />}
+          {user.active ? "Deactivate account" : "Activate account"}
         </Button>
       </article>
       <article className="mt-8">
