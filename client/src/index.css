@@ -193,6 +193,15 @@
   .content-height {
     min-height: calc(100vh - 72px); /* Adjust based on header height */
   }
+  .profile-aside-height {
+    min-height: calc(100vh - 64px); /* Adjust based on header height */
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .profile-aside-height {
+    min-height: auto;
+  }
 }
 
 /*
