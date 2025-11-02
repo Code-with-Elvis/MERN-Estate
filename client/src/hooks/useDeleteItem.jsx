@@ -34,7 +34,8 @@ const useDeleteItem = (apiUrl, queryKey, message) => {
         );
       } else if (error?.response?.status === 403) {
         toast.error(
-          "Access denied. You do not have permission for this action."
+          error?.response?.data?.message ||
+            "Access denied. You do not have permission for this action."
         );
         navigate("/");
       } else {
