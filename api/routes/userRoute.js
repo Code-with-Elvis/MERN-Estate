@@ -5,6 +5,7 @@ const {
   getUser,
   updateMe,
   updatePassword,
+  deactivateMe,
 } = require("../controllers/userController");
 const {
   signUp,
@@ -24,5 +25,6 @@ router.route("/me/update").patch(protect, updateMe);
 router.route("/me/update-password").patch(protect, updatePassword);
 router.route("/auth/logout").post(logout);
 router.post("/auth/google", googleSignUp);
+router.route("/me/deactivate").delete(protect, deactivateMe);
 
 module.exports = router;

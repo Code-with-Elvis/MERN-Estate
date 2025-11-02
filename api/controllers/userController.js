@@ -84,10 +84,29 @@ const updatePassword = catchAsync(async (req, res, next) => {
   });
 });
 
+const deactivateMe = catchAsync(async (req, res, next) => {
+  // === Find User ===
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return next(new AppError("No user found with that ID", 404));
+  }
+  // === Toggle active status ===
+  const isActive = user.active;
+
+  await User.findByIdAndUpdate(req.user.id, { active: !isActive });
+  res.status(200).json({
+    status: "success",
+    data: {
+      active: !isActive,
+    },
+  });
+});
+
 module.exports = {
   getAllUsers,
   getMe,
   getUser,
   updateMe,
   updatePassword,
+  deactivateMe,
 };
