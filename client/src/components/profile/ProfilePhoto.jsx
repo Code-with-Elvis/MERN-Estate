@@ -94,7 +94,11 @@ const ProfilePhoto = () => {
             login({ ...user, photo: downloadURL });
 
             // 4. Schedule cleanup (non-blocking)
-            if (oldPhoto && !oldPhoto.includes("flaticon.com"))
+            if (
+              oldPhoto &&
+              !oldPhoto.includes("flaticon.com") &&
+              oldPhoto.includes("firebasestorage.googleapis.com")
+            )
               cleanupOldImage(oldPhoto);
           },
         }

@@ -59,7 +59,11 @@ function DangerZone() {
 
           const oldPhoto = user?.photo;
 
-          if (oldPhoto && !oldPhoto.includes("flaticon.com")) {
+          if (
+            oldPhoto &&
+            !oldPhoto.includes("flaticon.com") &&
+            oldPhoto.includes("firebasestorage.googleapis.com")
+          ) {
             cleanupOldImage(oldPhoto);
           }
         },
