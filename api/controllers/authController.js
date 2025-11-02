@@ -152,6 +152,15 @@ const protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+const mustBeActive = catchAsync(async (req, res, next) => {
+  if (!req.user.active) {
+    return next(
+      new AppError("Your account is not active. Please activate it.", 403)
+    );
+  }
+  next();
+});
+
 const logout = (req, res) => {
   res.cookie("jwt", "loggedout", {
     expires: new Date(Date.now() + 10 * 1000), // == expires in 10 seconds ==
@@ -171,4 +180,5 @@ module.exports = {
   protect,
   logout,
   googleSignUp,
+  mustBeActive,
 };
