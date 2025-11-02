@@ -50,12 +50,16 @@ function DangerZone() {
           variant="destructive"
           disabled={isPending}
           className={` ${
-            user.active ? "bg-yellow-600" : "bg-green-600"
-          } font-bold disabled:cursor-not-allowed`}
+            user.active ? "bg-yellow-600" : "bg-gray-600"
+          }  disabled:cursor-not-allowed`}
           onClick={deactivateMe}
         >
           {isPending && <Loader2 className="animate-spin" />}
-          {user.active ? "Deactivate account" : "Activate account"}
+          {isPending
+            ? "Processing..."
+            : user.active
+            ? "Deactivate account"
+            : "Activate account"}
         </Button>
       </article>
       <article className="mt-8">
@@ -67,7 +71,7 @@ function DangerZone() {
 
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive" className=" bg-red-400 font-bold">
+            <Button variant="destructive" className=" bg-red-400">
               Delete account
             </Button>
           </AlertDialogTrigger>
