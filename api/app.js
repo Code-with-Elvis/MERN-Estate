@@ -1,5 +1,6 @@
 const express = require("express");
 const userRouter = require("./routes/userRoute");
+const listingRouter = require("./routes/listingRoute");
 const globalErrorHandler = require("./controllers/errorController");
 const cookieParser = require("cookie-parser");
 
@@ -10,15 +11,7 @@ app.use(cookieParser());
 
 // ROUTES
 app.use("/api/v1/users", userRouter);
-
-app.get("/", (req, res) => {
-  res.status(200).json({
-    data: {
-      status: "success",
-      message: "Welcome to the MERN Estate API",
-    },
-  });
-});
+app.use("/api/v1/listings", listingRouter);
 
 // GLOBAL ERROR HANDLING MIDDLEWARE
 app.use(globalErrorHandler);
