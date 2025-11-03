@@ -3,13 +3,11 @@ import {
   Tag,
   Key,
   Home,
-  Building2,
   Crown,
   LandPlot,
   Briefcase,
   Tractor,
 } from "lucide-react";
-import { id } from "zod/v4/locales";
 
 const heroTags = [
   {
