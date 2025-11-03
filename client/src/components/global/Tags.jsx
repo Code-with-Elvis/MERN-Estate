@@ -71,7 +71,7 @@ const Tags = ({ tags, setTags }) => {
             placeholder={
               tags.length === 0 ? "Type a tag and press Enter or comma" : ""
             }
-            className="flex-1 min-w-[120px] border-none focus:ring-0 focus:outline-none bg-transparent py-1"
+            className="text-sm flex-1 min-w-[120px] border-none focus:ring-0 focus:outline-none bg-transparent py-1"
           />
         </div>
       </CardContent>

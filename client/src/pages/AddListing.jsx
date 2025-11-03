@@ -13,17 +13,23 @@ import { Label } from "@/components/ui/label";
 import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 import Tags from "@/components/global/Tags";
-import ImageUploadField from "./ImageUploadField";
+import ImageUploadField from "../components/global/ImageUploadField";
+import { cleanupOldImages, uploadImagesToFirebase } from "@/lib/utils";
+import { toast } from "sonner";
+import usePostItem from "@/hooks/usePostItem";
+import { Spinner } from "@/components/ui/spinner";
 
 const listingSchema = z.object({
   title: z
     .string()
+    .trim()
     .min(10, "Title must be at least 10 characters")
     .max(100, "Title must be at most 100 characters"),
   description: z
     .string()
+    .trim()
     .min(20, "Description must be at least 20 characters")
-    .max(500, "Description must be at most 500 characters"),
+    .max(1000, "Description must be at most 1000 characters"),
   price: z.preprocess(
     (val) => Number(val),
     z.number().min(0, "Price must be a positive number")
@@ -50,17 +56,64 @@ const AddListing = () => {
   const [count, setCount] = useState(0);
   const [tags, setTags] = useState([]);
   const [images, setImages] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(listingSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const { postItem, isPending } = usePostItem(
+    "/api/v1/listings",
+    "listings",
+    "Listing created successfully!"
+  );
+
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      if (selectedFiles.length === 0) {
+        toast.warning("Please upload at least one image.");
+        return;
+      }
+      if (!data.price) {
+        toast.warning("Please provide a price.");
+        return;
+      }
+      if (data.priceDiscount && data.priceDiscount >= data.price) {
+        toast.warning("Discounted price must be less than the regular price.");
+        return;
+      }
+
+      const uploadedUrls = await uploadImagesToFirebase(selectedFiles);
+
+      const listingData = {
+        ...data,
+        images: uploadedUrls,
+        tags,
+      };
+
+      postItem(listingData, {
+        onSuccess: () => {
+          setImages([]);
+          reset();
+          setSelectedFiles([]);
+        },
+        onError: () => {
+          cleanupOldImages(uploadedUrls);
+        },
+      });
+    } catch (error) {
+      console.error("Uploading images error:", error);
+      toast.error(error?.message || "Failed to upload images.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -97,14 +150,14 @@ const AddListing = () => {
               >
                 <InputGroupTextarea
                   {...register("description")}
-                  onChange={(e) => setCount(e.target.value.length)}
+                  onChange={(e) => setCount(e.target.value.trim().length)}
                   rows={4}
                   className="resize-none py-5"
                   placeholder="Enter property description"
                 />
                 <InputGroupAddon align="block-end">
-                  <InputGroupText className="text-muted-foreground text-xs">
-                    {500 - count} characters left
+                  <InputGroupText className="font-medium text-xs text-accent">
+                    {1000 - count} characters left
                   </InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
@@ -241,9 +294,23 @@ const AddListing = () => {
             <Tags tags={tags} setTags={setTags} />
             {/* Images Field */}
 
-            <ImageUploadField images={images} setImages={setImages} />
-            <Button type="submit" className="uppercase w-44">
-              Submit
+            <ImageUploadField
+              images={images}
+              setImages={setImages}
+              setSelectedFiles={setSelectedFiles}
+            />
+            <Button
+              disabled={isLoading || isPending}
+              type="submit"
+              className="uppercase w-48"
+            >
+              {isLoading || isPending ? (
+                <>
+                  <Spinner /> Submitting...
+                </>
+              ) : (
+                "Submit Listing"
+              )}
             </Button>
           </article>
         </form>

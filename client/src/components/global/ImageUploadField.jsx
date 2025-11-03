@@ -56,7 +56,7 @@ const SortableImage = ({ id, src, onRemove }) => {
   );
 };
 
-const ImageUploadField = ({ images, setImages }) => {
+const ImageUploadField = ({ images, setImages, setSelectedFiles }) => {
   const sensors = useSensors(useSensor(PointerSensor));
 
   const handleFileChange = (e) => {
@@ -65,20 +65,25 @@ const ImageUploadField = ({ images, setImages }) => {
 
     const previews = selected.map((file) => URL.createObjectURL(file));
     setImages((prev) => [...prev, ...previews]);
+    setSelectedFiles((prev) => [...prev, ...selected]);
   };
 
   const handleRemove = (id) => {
+    const removedIndex = images.indexOf(id);
     setImages((prev) => prev.filter((img) => img !== id));
+    setSelectedFiles((prev) =>
+      prev.filter((_, index) => index !== removedIndex)
+    );
   };
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (active.id !== over.id) {
-      setImages((prev) => {
-        const oldIndex = prev.indexOf(active.id);
-        const newIndex = prev.indexOf(over.id);
-        return arrayMove(prev, oldIndex, newIndex);
-      });
+      const oldIndex = images.indexOf(active.id);
+      const newIndex = images.indexOf(over.id);
+
+      setImages((prev) => arrayMove(prev, oldIndex, newIndex));
+      setSelectedFiles((prev) => arrayMove(prev, oldIndex, newIndex));
     }
   };
 

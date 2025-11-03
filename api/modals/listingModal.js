@@ -66,7 +66,7 @@ const listingSchema = new mongoose.Schema(
     ratingsAverage: {
       type: Number,
       default: 0,
-      min: 1,
+      min: 0,
       max: 5,
       set: (val) => Math.round(val * 10) / 10,
     },
