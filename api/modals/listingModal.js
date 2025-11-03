@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const slugify = require("slugify");
 
-const listingModalSchema = new mongoose.Schema(
+const listingSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -61,6 +62,7 @@ const listingModalSchema = new mongoose.Schema(
       ref: "User",
       required: [true, "Listing must be associated with a user"],
     },
+    tags: [String],
     ratingsAverage: {
       type: Number,
       default: 0,
@@ -73,6 +75,13 @@ const listingModalSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Listing = mongoose.model("Listing", listingModalSchema);
+// === Create Slug ===
+
+listingSchema.pre("save", function (next) {
+  this.slug = slugify(this.title, { lower: true });
+  next();
+});
+
+const Listing = mongoose.model("Listing", listingSchema);
 
 module.exports = Listing;
