@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import {
   About,
+  AddListing,
   Favorites,
   Home,
   List,
@@ -40,6 +41,7 @@ const router = createBrowserRouter(
         </Route>
         <Route path="listings" element={<Listings />} />
         <Route path="listings/:slug" element={<List />} />
+        <Route path="add-listing" element={<AddListing />} />
         <Route path="settings" element={<Settings />} />
       </Route>
       {/* Protected (admin-only) routes */}

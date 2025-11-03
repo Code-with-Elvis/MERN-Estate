@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Settings2, User2Icon } from "lucide-react";
+import { PlusSquare, Settings2, User2Icon } from "lucide-react";
 import LogoutBtn from "./LogoutBtn";
 
 const UserProfile = ({ user }) => {
@@ -31,7 +31,7 @@ const UserProfile = ({ user }) => {
           </Avatar>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="mr-8 sm:mr-10">
+      <DropdownMenuContent className="mr-8 sm:mr-10 w-40">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
@@ -42,6 +42,12 @@ const UserProfile = ({ user }) => {
         <DropdownMenuItem asChild>
           <Link to="/settings" className="flex items-center gap-2">
             <Settings2 /> Settings
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link to="/add-listing" className="flex items-center gap-2">
+            <PlusSquare /> Add Listing
           </Link>
         </DropdownMenuItem>
 
