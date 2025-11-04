@@ -18,7 +18,7 @@ async function uploadImagesToFirebase(files) {
   if (!files || files.length === 0) return [];
 
   // === Validate file sizes and types before upload ===
-  const maxSizeInMB = 1.5;
+  const maxSizeInMB = 1; // 1MB
   const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
 
   for (const file of files) {
