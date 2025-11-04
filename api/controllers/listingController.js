@@ -16,6 +16,19 @@ const createListing = catchAsync(async (req, res, next) => {
   });
 });
 
+const getMyListings = catchAsync(async (req, res, next) => {
+  const userId = req.user.id;
+  const listings = await Listing.find({ listedBy: userId });
+  res.status(200).json({
+    status: "success",
+    results: listings.length,
+    data: {
+      listings,
+    },
+  });
+});
+
 module.exports = {
   createListing,
+  getMyListings,
 };
