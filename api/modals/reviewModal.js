@@ -35,6 +35,49 @@ reviewSchema.index(
   { unique: true }
 );
 
+// Static method to calculate average ratings
+reviewSchema.statics.calcAverageRatings = async function (listingId) {
+  const stats = await this.aggregate([
+    { $match: { listing: listingId } },
+    {
+      $group: {
+        _id: "$listing",
+        nRating: { $sum: 1 },
+        avgRating: { $avg: "$rating" },
+      },
+    },
+  ]);
+
+  if (stats.length > 0) {
+    await mongoose.model("Listing").findByIdAndUpdate(listingId, {
+      ratingsQuantity: stats[0].nRating,
+      ratingsAverage: stats[0].avgRating,
+    });
+  } else {
+    await mongoose.model("Listing").findByIdAndUpdate(listingId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 0,
+    });
+  }
+};
+
+// Middleware to update ratings after saving a review
+reviewSchema.post("save", function () {
+  this.constructor.calcAverageRatings(this.listing);
+});
+
+// Middleware for updates and deletes
+reviewSchema.pre(/^findOneAnd/, async function (next) {
+  this.r = await this.findOne();
+  next();
+});
+
+reviewSchema.post(/^findOneAnd/, async function () {
+  if (this.r) {
+    await this.r.constructor.calcAverageRatings(this.r.listing);
+  }
+});
+
 const Review = mongoose.model("Review", reviewSchema);
 
 module.exports = Review;
