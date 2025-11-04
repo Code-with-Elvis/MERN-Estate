@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
+const Review = require("../modals/reviewModal");
 
 const listingSchema = new mongoose.Schema(
   {
@@ -72,7 +73,7 @@ const listingSchema = new mongoose.Schema(
     },
     ratingsQuantity: { type: Number, default: 0 },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
 // === Create Slug ===
@@ -80,6 +81,14 @@ const listingSchema = new mongoose.Schema(
 listingSchema.pre("save", function (next) {
   this.slug = slugify(this.title, { lower: true });
   next();
+});
+
+// === Virtual populate reviews ===
+
+listingSchema.virtual("reviews", {
+  ref: Review,
+  foreignField: "listing",
+  localField: "_id",
 });
 
 const Listing = mongoose.model("Listing", listingSchema);

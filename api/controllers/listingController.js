@@ -30,7 +30,9 @@ const getMyListings = catchAsync(async (req, res, next) => {
 
 const getListing = catchAsync(async (req, res, next) => {
   const listingSlug = req.params.slug;
-  const listing = await Listing.findOne({ slug: listingSlug });
+  const listing = await Listing.findOne({ slug: listingSlug })
+    .populate("listedBy", "name email")
+    .populate("reviews");
   if (!listing) {
     return next(new AppError("No listing found with that slug", 404));
   }
