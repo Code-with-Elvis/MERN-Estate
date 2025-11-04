@@ -25,7 +25,7 @@ const UserProfile = ({ user }) => {
               src={user?.photo}
               className="w-full h-full object-cover"
             />
-            <AvatarFallback className="text-foreground font-semibold">
+            <AvatarFallback className="text-foreground font-semibold select-none">
               {user.name.charAt(0)}
             </AvatarFallback>
           </Avatar>
