@@ -12,28 +12,34 @@ const DeleteBtn = ({ listingId, images }) => {
   );
   const handleDelete = (e) => {
     // === Prevent the Link navigation ===
+
     e.preventDefault();
     e.stopPropagation();
 
-    // === Proceed to delete the listing ===
-    deleteItem(
-      { id: listingId },
-      {
-        onSuccess: () => {
-          // === Cleanup old images from firebase ===
+    // === Show confirmation dialog ===
 
-          images.forEach((image) => {
-            if (
-              image &&
-              !image.includes("flaticon.com") &&
-              image.includes("firebasestorage.googleapis.com")
-            ) {
-              cleanupOldImages([image]);
-            }
-          });
-        },
-      }
-    );
+    if (confirm("Are you sure you want to delete this listing?")) {
+      // === Proceed to delete the listing ===
+
+      deleteItem(
+        { id: listingId },
+        {
+          onSuccess: () => {
+            // === Cleanup old images from firebase ===
+
+            images.forEach((image) => {
+              if (
+                image &&
+                !image.includes("flaticon.com") &&
+                image.includes("firebasestorage.googleapis.com")
+              ) {
+                cleanupOldImages([image]);
+              }
+            });
+          },
+        }
+      );
+    }
   };
   return (
     <Button
