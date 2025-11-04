@@ -45,7 +45,7 @@ const Profile = () => {
       <section className="md:py-8">
         <Header />
 
-        <div className="mt-18 flex items-center">
+        <div className="mt-18 flex justify-center">
           <Loader className="animate-spin" />
         </div>
       </section>
@@ -91,7 +91,7 @@ const Profile = () => {
                     alt={listing.title}
                     className="w-full"
                   />
-                  <DeleteBtn />
+                  <DeleteBtn listingId={listing._id} images={listing.images} />
                 </div>
               </CardHeader>
               <CardContent className="px-2.5 py-2 pt-0">
