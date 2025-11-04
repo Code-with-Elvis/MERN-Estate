@@ -28,7 +28,31 @@ const getMyListings = catchAsync(async (req, res, next) => {
   });
 });
 
+const deleteListing = catchAsync(async (req, res, next) => {
+  const listingId = req.params.id;
+  const userId = req.user.id;
+
+  const listing = await Listing.findById(listingId);
+  if (!listing) {
+    return next(new AppError("No listing found with that ID", 404));
+  }
+
+  if (listing.listedBy.toString() !== userId) {
+    return next(
+      new AppError("You are not authorized to delete this listing", 403)
+    );
+  }
+
+  await Listing.findByIdAndDelete(listingId);
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});
+
 module.exports = {
   createListing,
   getMyListings,
+  deleteListing,
 };
