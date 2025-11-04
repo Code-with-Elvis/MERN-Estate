@@ -54,7 +54,13 @@ const Profile = () => {
 
   if (error) {
     return (
-      <CommonError message="Failed to load listings. Please try again later." />
+      <section className="md:py-8">
+        <Header />
+
+        <div className="mt-5">
+          <CommonError message="Failed to load listings. Please try again later." />
+        </div>
+      </section>
     );
   }
 
