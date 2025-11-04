@@ -24,7 +24,7 @@ const useLogOut = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.removeQueries();
       toast.success("Logout successful!");
       navigate("/");
       logout();

@@ -58,7 +58,7 @@ const Profile = () => {
     );
   }
 
-  if (!data.data || data.data.length === 0) {
+  if (!data.data.listings || data.data.listings.length === 0) {
     return (
       <section className="md:py-8">
         <Header />
@@ -70,7 +70,6 @@ const Profile = () => {
     );
   }
 
-  console.log(data.data);
   const listings = data.data.listings;
 
   return (
