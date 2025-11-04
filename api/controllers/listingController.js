@@ -28,6 +28,20 @@ const getMyListings = catchAsync(async (req, res, next) => {
   });
 });
 
+const getListing = catchAsync(async (req, res, next) => {
+  const listingSlug = req.params.slug;
+  const listing = await Listing.findOne({ slug: listingSlug });
+  if (!listing) {
+    return next(new AppError("No listing found with that slug", 404));
+  }
+  res.status(200).json({
+    status: "success",
+    data: {
+      listing,
+    },
+  });
+});
+
 const deleteListing = catchAsync(async (req, res, next) => {
   const listingId = req.params.id;
   const userId = req.user.id;
@@ -53,6 +67,7 @@ const deleteListing = catchAsync(async (req, res, next) => {
 
 module.exports = {
   createListing,
+  getListing,
   getMyListings,
   deleteListing,
 };

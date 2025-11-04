@@ -1,5 +1,5 @@
 import {
-  BiLogoFacebook,
+  BiLogoFacebookSquare,
   BiLogoInstagram,
   BiLogoPinterest,
 } from "react-icons/bi";
@@ -28,7 +28,7 @@ const Footer = () => {
         {/*Footer content right*/}
         <div className="flex items-center gap-4 text-white text-xl">
           <a href="#" className="hover:text-accent">
-            <BiLogoFacebook />
+            <BiLogoFacebookSquare />
           </a>
           <a href="#" className="hover:text-accent">
             <BiLogoInstagram />
