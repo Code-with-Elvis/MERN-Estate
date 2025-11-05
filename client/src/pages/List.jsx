@@ -28,7 +28,15 @@ const List = () => {
   const logout = useAuth((state) => state.logout);
   const { slug } = useParams();
   const [showmore, setShowmore] = useState(false);
+  const [expandedReviews, setExpandedReviews] = useState({});
   const user = useAuth((state) => state.user);
+
+  const toggleReviewExpansion = (reviewId) => {
+    setExpandedReviews((prev) => ({
+      ...prev,
+      [reviewId]: !prev[reviewId],
+    }));
+  };
 
   const { data, isPending, error } = useGetItems(
     `/api/v1/listings/${slug}`,
@@ -104,7 +112,10 @@ const List = () => {
       <div className="hidden sm:block h-12 bg-[#222]"></div>
       <div className="container pt-10">
         <header className="flex items-center justify-between">
-          <Badge className="rounded-none uppercase bg-[#222]">{category}</Badge>
+          <Badge className="py-1 px-4 rounded-md uppercase bg-foreground text-background">
+            {category}
+          </Badge>
+
           <div className="flex items-center gap-4">
             <Button variant="outline">
               <IoShareSocialOutline className="size-5" />
@@ -119,7 +130,7 @@ const List = () => {
 
         {/* Listing Images */}
 
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
           <article className="">
             <img
               src={images[0]}
@@ -163,20 +174,25 @@ const List = () => {
 
         <div className=" md:mt-8  grid grid-cols-1 md:grid-cols-[3fr_1.5fr] gap-5 md:gap-8">
           <article className="">
-            <h1 className=" text-lg sm:text-xl uppercase font-bold">{title}</h1>
+            <h1 className=" text-lg sm:text-xl capitalize font-bold">
+              {title}
+            </h1>
             <div className="mt-2 flex items-center gap-2">
               {tags &&
                 tags.slice(0, 4).map((tag, index) => (
                   <Badge
                     key={index}
-                    className="py-1 px-3 capitalize rounded-md bg-accent"
+                    variant={"outline"}
+                    className="py-1 px-3 capitalize rounded-md"
                   >
                     {tag}
                   </Badge>
                 ))}
             </div>
             <p className="mt-4 leading-relaxed">
-              {showmore ? description : `${description.substring(0, 300)}...`}
+              {showmore || description.length <= 300
+                ? description
+                : `${description.substring(0, 300)}...`}
               {description.length > 300 && (
                 <Button
                   variant="link"
@@ -250,9 +266,7 @@ const List = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button className="w-full uppercase font-semibold">
-                  Contact Seller
-                </Button>
+                <Button className="w-full uppercase ">Contact Seller</Button>
               </CardFooter>
             </Card>
           </aside>
@@ -266,10 +280,10 @@ const List = () => {
               No reviews yet. Be the first one to add a review!
             </p>
           ) : (
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {reviews.map((review) => (
-                <Card key={review._id} className="gap-1 bg-background">
-                  <CardHeader>
+                <Card key={review._id} className="gap-1 py-3 bg-background">
+                  <CardHeader className="px-3">
                     <div className="flex items-center gap-3">
                       <Avatar className="size-11">
                         <AvatarImage
@@ -308,8 +322,24 @@ const List = () => {
                       </div>
                     </div>
                   </CardHeader>
-                  <CardContent>
-                    <p>{review.review}</p>
+                  <CardContent className="px-3.5">
+                    <p className="text-sm font-medium">
+                      {expandedReviews[review._id] ||
+                      review.review.length <= 100
+                        ? review.review
+                        : `${review.review.slice(0, 100)}...`}
+                      {review.review.length > 100 && (
+                        <Button
+                          variant="link"
+                          onClick={() => toggleReviewExpansion(review._id)}
+                          className="text-primary font-bold underline hover:opacity-80"
+                        >
+                          {expandedReviews[review._id]
+                            ? "View Less"
+                            : "View More"}
+                        </Button>
+                      )}
+                    </p>
                   </CardContent>
                 </Card>
               ))}

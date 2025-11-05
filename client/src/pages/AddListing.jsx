@@ -121,7 +121,9 @@ const AddListing = () => {
     <section className="pb-14">
       <div className="hidden sm:block h-12 bg-[#222]"></div>
       <div className="container pt-10">
-        <h1 className="text-xl font-extrabold mb-8">Create a Listing</h1>
+        <h1 className="text-lg uppercase font-extrabold mb-8">
+          Create a Listing
+        </h1>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="grid grid-col-1 md:grid-cols-2 gap-5 gap-x-10"
