@@ -7,6 +7,8 @@ import {
 import {
   About,
   AddListing,
+  EditDetails,
+  EditImage,
   Favorites,
   Home,
   List,
@@ -28,6 +30,8 @@ const router = createBrowserRouter(
       {/* Public pages */}
       <Route index element={<Home />} />
       <Route path="about" element={<About />} />
+      <Route path="listings" element={<Listings />} />
+      <Route path="listings/:slug" element={<List />} />
       {/* Public-only routes */}
       <Route element={<PublicRoute />}>
         <Route path="signin" element={<SignIn />} />
@@ -39,9 +43,10 @@ const router = createBrowserRouter(
           <Route index element={<Profile />} />
           <Route path="favorites" element={<Favorites />} />
         </Route>
-        <Route path="listings" element={<Listings />} />
-        <Route path="listings/:slug" element={<List />} />
+
         <Route path="add-listing" element={<AddListing />} />
+        <Route path="listings/:slug/edit-details" element={<EditDetails />} />
+        <Route path="listings/:slug/edit-image" element={<EditImage />} />
         <Route path="settings" element={<Settings />} />
       </Route>
       {/* Protected (admin-only) routes */}

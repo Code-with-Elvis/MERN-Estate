@@ -10,3 +10,5 @@ export { default as Settings } from "./Settings";
 export { default as ProfileLayout } from "./ProfileLayout";
 export { default as Favorites } from "./Favorites";
 export { default as AddListing } from "./AddListing";
+export { default as EditDetails } from "./EditDetails";
+export { default as EditImage } from "./EditImage";
