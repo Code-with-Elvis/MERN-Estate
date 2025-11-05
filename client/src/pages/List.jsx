@@ -4,7 +4,7 @@ import useGetItems from "@/hooks/useGetItems";
 import { useAuth } from "@/store";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { GoHeart } from "react-icons/go";
@@ -106,6 +106,7 @@ const List = () => {
   const hasAddedReview = reviews.some(
     (review) => review.user._id === user?._id
   );
+  const createdByMe = listedBy._id === user?._id;
 
   return (
     <section className="pb-14">
@@ -125,6 +126,11 @@ const List = () => {
               <GoHeart className="size-5" />
               Save
             </Button>
+            {createdByMe && (
+              <Button>
+                <Link to={`/listings/${slug}/edit-details`}>Edit</Link>
+              </Button>
+            )}
           </div>
         </header>
 
@@ -245,7 +251,9 @@ const List = () => {
           <aside>
             <Card className="mt-2 shadow-[0_4px_14px_0_rgba(0,0,0,0.1)]">
               <CardHeader>
-                <p className="text-2xl font-extrabold">${price}</p>
+                <p className="text-2xl font-extrabold">
+                  ${price.toLocaleString()}
+                </p>
                 <p className="text-sm font-medium text-muted-foreground">
                   <span className="text-foreground font-semibold">
                     Located In:{" "}
