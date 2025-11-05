@@ -20,6 +20,7 @@ import { timeAgo } from "@/lib/format";
 import { Star } from "lucide-react";
 import { FaRegStar } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
+import AddReviewBtn from "@/components/Listings/AddReviewBtn";
 
 const List = () => {
   const queryClient = useQueryClient();
@@ -259,11 +260,11 @@ const List = () => {
         {/* Reviews Section */}
 
         <div className="mt-6">
-          {!hasAddedReview && user && (
-            <Button className="mb-2">Add a Review</Button>
-          )}
+          {!hasAddedReview && user && <AddReviewBtn listingId={_id} />}
           {reviews.length === 0 ? (
-            <p className="text-muted-foreground">No reviews yet.</p>
+            <p className="text-muted-foreground text-center mt-6">
+              No reviews yet. Be the first one to add a review!
+            </p>
           ) : (
             <div className="space-y-4">
               {reviews.map((review) => (

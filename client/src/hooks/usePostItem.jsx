@@ -19,7 +19,8 @@ const usePostItem = (apiUrl, queryKey, message) => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      const qkey = Array.isArray(queryKey) ? queryKey : [queryKey];
+      queryClient.invalidateQueries({ queryKey: qkey });
       toast.success(message || "Item posted successfully");
     },
     onError: (error) => {
