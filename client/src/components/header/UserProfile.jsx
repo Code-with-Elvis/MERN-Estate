@@ -16,19 +16,24 @@ const UserProfile = ({ user }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <div className="flex items-center gap-2">
-          <span>
-            <BiChevronDown />
+        <div className="flex items-center gap-3 cursor-pointer">
+          <span className="text-xs uppercase font-medium inline-block w-18 text-end  truncate">
+            {user.name.split(" ")[0]}
           </span>
-          <Avatar className="size-9">
-            <AvatarImage
-              src={user?.photo}
-              className="w-full h-full object-cover"
-            />
-            <AvatarFallback className="text-foreground font-semibold select-none">
-              {user.name.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
+          <div className="flex items-center gap-2">
+            <span>
+              <BiChevronDown />
+            </span>
+            <Avatar className="size-9">
+              <AvatarImage
+                src={user?.photo}
+                className="w-full h-full object-cover"
+              />
+              <AvatarFallback className="text-foreground font-semibold select-none">
+                {user.name.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+          </div>
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-8 sm:mr-10 w-40">
@@ -47,14 +52,16 @@ const UserProfile = ({ user }) => {
 
         <DropdownMenuItem asChild>
           <Link to="/add-listing" className="flex items-center gap-2">
-            <PlusSquare /> Add Listing
+            <PlusSquare /> Create
           </Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild>
-          <LogoutBtn />
+          <div className="py-1">
+            <LogoutBtn />
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
