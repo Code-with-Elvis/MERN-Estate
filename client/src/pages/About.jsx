@@ -25,10 +25,10 @@ const About = () => {
           <Badge variant="secondary" className="mb-4 font-manrope">
             Established 2010
           </Badge>
-          <h1 className="text-3xl md:text-4xl font-extrabold mb-6 bg-linear-to-r from-primary to-accent bg-clip-text text-transparent">
+          <h1 className="text-2xl uppercase font-extrabold mb-6">
             Our Journey So Far
           </h1>
-          <p className=" text-muted-foreground mb-8 leading-relaxed">
+          <p className="mb-8 leading-relaxed">
             Your trusted partner in real estate for over a decade. We connect
             dreams with reality, helping thousands of families find their
             perfect home and investors discover lucrative opportunities.
@@ -51,15 +51,15 @@ const About = () => {
 
         {/* Story Section */}
 
-        <div className="grid md:grid-cols-2 gap-12 items-center py-20">
+        <div className="grid  md:grid-cols-2 gap-12 items-center py-20">
           <div>
             <Badge variant="outline" className="mb-4">
               Our Story
             </Badge>
-            <h2 className="text-3xl font-bold mb-6">
+            <h2 className="text-[22px] font-bold mb-6">
               Building Dreams Since 2010
             </h2>
-            <div className="space-y-4 text-muted-foreground leading-relaxed">
+            <div className="space-y-4 text-[15px] text-muted-foreground leading-relaxed">
               <p>
                 What started as a small family business has grown into one of
                 the region's most trusted real estate companies. Founded by
@@ -92,17 +92,17 @@ const About = () => {
 
       {/* Mission Section */}
       <div className="container">
-        <Card className="text-center py-12 bg-card/80 backdrop-blur-sm border-0 shadow-2xl">
+        <Card className="text-center gap-0 py-12 bg-card/80 backdrop-blur-sm border-0 shadow-2xl">
           <CardHeader className="">
             <Badge variant="secondary" className="mb-4 mx-auto w-fit">
               Our Mission
             </Badge>
-            <CardTitle className="text-3xl font-bold">
+            <CardTitle className="text-[22px] font-bold mb-2">
               Modernizing Real Estate
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <CardDescription className="text-base leading-relaxed mb-8">
+            <CardDescription className="text-[15px] leading-relaxed mb-8">
               Our mission is to revolutionize the real estate industry by
               combining traditional expertise with innovative technology. We're
               committed to making property transactions transparent, efficient,
@@ -143,8 +143,8 @@ const About = () => {
       <div className="container my-20">
         <Card className="max-w-2xl mx-auto text-center bg-linear-to-br from-primary/5 to-accent/5 border-primary/20">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold">Start Here</CardTitle>
-            <CardDescription className="text-base">
+            <CardTitle className="text-[22px] font-bold">Start Here</CardTitle>
+            <CardDescription className="text-[15px]">
               Buy. Sell. Invest. We’ll guide you every step of the way.
             </CardDescription>
           </CardHeader>
