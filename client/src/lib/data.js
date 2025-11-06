@@ -8,6 +8,10 @@ import {
   Briefcase,
   Tractor,
 } from "lucide-react";
+import HomeApartment from "../assets/home-apartment.png";
+import HomeVilla from "../assets/home-villa.png";
+import HomeCommercial from "../assets/home-commercial.png";
+import HomeLand from "../assets/home-land.png";
 
 const heroTags = [
   {
@@ -48,4 +52,27 @@ const heroTags = [
   },
 ];
 
-export { heroTags };
+const homeInterest = [
+  {
+    id: nanoid(),
+    category: "Apartments",
+    imageUrl: HomeApartment,
+  },
+  {
+    id: nanoid(),
+    category: "Villas",
+    imageUrl: HomeVilla,
+  },
+  {
+    id: nanoid(),
+    category: "Commercial",
+    imageUrl: HomeCommercial,
+  },
+  {
+    id: nanoid(),
+    category: "Land",
+    imageUrl: HomeLand,
+  },
+];
+
+export { heroTags, homeInterest };
