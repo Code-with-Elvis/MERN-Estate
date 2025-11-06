@@ -90,6 +90,7 @@ const List = () => {
     _id,
     description,
     price,
+    priceDiscount,
     reviews,
     ratingsQuantity,
     images,
@@ -252,7 +253,7 @@ const List = () => {
             <Card className="mt-2 shadow-[0_4px_14px_0_rgba(0,0,0,0.1)]">
               <CardHeader>
                 <p className="text-2xl font-extrabold">
-                  ${price.toLocaleString()}
+                  ${priceDiscount.toLocaleString()} - ${price.toLocaleString()}
                 </p>
                 <p className="text-sm font-medium text-muted-foreground">
                   <span className="text-foreground font-semibold">
@@ -274,7 +275,7 @@ const List = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button className="w-full uppercase ">Contact Seller</Button>
+                <Button className="w-full uppercase ">Contact Owner</Button>
               </CardFooter>
             </Card>
           </aside>
