@@ -16,6 +16,49 @@ const createListing = catchAsync(async (req, res, next) => {
   });
 });
 
+const updateListing = catchAsync(async (req, res, next) => {
+  const listingSlug = req.params.slug;
+  const userId = req.user.id;
+
+  const listing = await Listing.findOne({ slug: listingSlug });
+  if (!listing) {
+    return next(new AppError("No listing found with that slug", 404));
+  }
+
+  if (listing.listedBy.toString() !== userId) {
+    return next(
+      new AppError("You are not authorized to update this listing", 403)
+    );
+  }
+
+  // === Manual validation for priceDiscount ===
+
+  if (req.body.priceDiscount) {
+    const price = req.body.price || listing.price;
+    if (req.body.priceDiscount >= price) {
+      return next(
+        new AppError(
+          "Discounted price must be less than the original price",
+          400
+        )
+      );
+    }
+  }
+
+  // === Update the listing document directly to avoid validation issues with findByIdAndUpdate ===
+
+  Object.assign(listing, req.body);
+
+  const updatedListing = await listing.save();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      listing: updatedListing,
+    },
+  });
+});
+
 const getMyListings = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const listings = await Listing.find({ listedBy: userId });
@@ -78,4 +121,5 @@ module.exports = {
   getListing,
   getMyListings,
   deleteListing,
+  updateListing,
 };
