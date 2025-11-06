@@ -14,7 +14,7 @@ const FindInterest = () => {
             <Link
               to={`/listings?category=${item.category.toLowerCase()}`}
               key={item.id}
-              className="relative rounded-lg overflow-hidden"
+              className="relative rounded-xl overflow-hidden"
             >
               <img
                 src={item.imageUrl}
