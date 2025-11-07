@@ -40,7 +40,7 @@ const Landing = () => {
               {/* == Search Form == */}
               <SearchForm />
               {/* == Badge == */}
-              <Badge className="mt-16 max-[400px]:text-xs bg-yellow-600 text-sm capitalize py-2 px-4 border border-white rounded-sm mx-auto block">
+              <Badge className="mt-16 max-[400px]:text-xs bg-accent text-foreground font-semibold text-sm capitalize py-2 px-4 border border-white rounded-sm mx-auto block">
                 List your property for free. No hidden fees.
               </Badge>
             </div>

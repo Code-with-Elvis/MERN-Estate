@@ -98,6 +98,7 @@ const EditDetails = () => {
         listingType: listing.listingType,
       });
       setTags(listing.tags || []);
+      setCount(listing.description.length || 0);
     }
   }, [data, reset]);
 

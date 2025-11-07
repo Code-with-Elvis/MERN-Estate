@@ -14,9 +14,15 @@ const Header = () => {
         {/* Header content right */}
         <SmallNav />
         <div className="hidden sm:flex items-center space-x-7 text-sm font-medium  uppercase">
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-          <Link to="/listings">Listings</Link>
+          <Link to="/" className="hover:text-accent">
+            Home
+          </Link>
+          <Link to="/about" className="hover:text-accent">
+            About
+          </Link>
+          <Link to="/listings" className="hover:text-accent">
+            Listings
+          </Link>
         </div>
 
         {/* Header center logo */}
