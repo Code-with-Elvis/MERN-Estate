@@ -71,12 +71,49 @@ const getAllListings = catchAsync(async (req, res, next) => {
   let queryStr = JSON.stringify(queryObj);
   queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-  let query = Listing.find(JSON.parse(queryStr));
+  // Parse the query object
+  let parsedQuery = JSON.parse(queryStr);
+
+  // Convert string values to numbers for numeric fields with comparison operators
+  const processedQuery = {};
+
+  Object.keys(parsedQuery).forEach((key) => {
+    // Check if this is a numeric field with comparison operator (e.g., "price[$gte]")
+    const numericFieldPattern =
+      /^(price|priceDiscount|ratingsAverage|ratingsQuantity)\[\$\w+\]$/;
+
+    if (numericFieldPattern.test(key)) {
+      // Extract field name and operator (e.g., "price" and "$gte" from "price[$gte]")
+      const matches = key.match(/^(\w+)\[\$(\w+)\]$/);
+      if (matches) {
+        const fieldName = matches[1];
+        const operator = `$${matches[2]}`;
+
+        // Initialize nested object if it doesn't exist
+        if (!processedQuery[fieldName]) {
+          processedQuery[fieldName] = {};
+        }
+
+        // Convert string to number if it's a valid number
+        const value = parsedQuery[key];
+        processedQuery[fieldName][operator] = !isNaN(value)
+          ? Number(value)
+          : value;
+      }
+    } else {
+      // For non-numeric comparison fields, keep as is but convert simple numeric values
+      const value = parsedQuery[key];
+      processedQuery[key] =
+        !isNaN(value) && typeof value === "string" ? Number(value) : value;
+    }
+  });
+
+  let query = Listing.find(processedQuery);
 
   // 1.c) == Text Search ==
 
-  if (req.query.search) {
-    const searchTerm = req.query.search;
+  if (req.query.q) {
+    const searchTerm = req.query.q;
 
     // Use MongoDB text search for better performance
     query = query.find({
@@ -89,7 +126,7 @@ const getAllListings = catchAsync(async (req, res, next) => {
 
   // 2) == Sorting ==
 
-  if (req.query.search) {
+  if (req.query.q) {
     // Sort by text search relevance score when searching
     query = query.sort({ score: { $meta: "textScore" } });
   } else if (req.query.sort) {
