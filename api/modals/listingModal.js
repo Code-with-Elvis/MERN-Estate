@@ -76,6 +76,16 @@ const listingSchema = new mongoose.Schema(
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
+// === Text Index for Search ===
+
+listingSchema.index({
+  title: "text",
+  description: "text",
+  location: "text",
+  tags: "text",
+  category: "text",
+});
+
 // === Create Slug ===
 
 listingSchema.pre("save", function (next) {

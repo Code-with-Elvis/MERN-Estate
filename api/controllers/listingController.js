@@ -59,6 +59,72 @@ const updateListing = catchAsync(async (req, res, next) => {
   });
 });
 
+const getAllListings = catchAsync(async (req, res, next) => {
+  // 1.a) == Filtering ==
+
+  const queryObj = { ...req.query };
+  const excludedFields = ["page", "sort", "limit", "fields", "search"];
+  excludedFields.forEach((el) => delete queryObj[el]);
+
+  // 1.b) == Advanced Filtering ==
+
+  let queryStr = JSON.stringify(queryObj);
+  queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+
+  let query = Listing.find(JSON.parse(queryStr));
+
+  // 1.c) == Text Search ==
+
+  if (req.query.search) {
+    const searchTerm = req.query.search;
+
+    // Use MongoDB text search for better performance
+    query = query.find({
+      $text: { $search: searchTerm },
+    });
+
+    // Add text search score for relevance sorting
+    query = query.select({ score: { $meta: "textScore" } });
+  }
+
+  // 2) == Sorting ==
+
+  if (req.query.search) {
+    // Sort by text search relevance score when searching
+    query = query.sort({ score: { $meta: "textScore" } });
+  } else if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join(" ");
+    query = query.sort(sortBy);
+  } else {
+    query = query.sort("-createdAt");
+  }
+
+  // 3) == Field Limiting ==
+
+  if (req.query.fields) {
+    const fields = req.query.fields.split(",").join(" ");
+    query = query.select(fields);
+  } else {
+    query = query.select("-__v");
+  }
+
+  // 4) == Pagination ==
+
+  const page = req.query.page * 1 || 1;
+  const limit = req.query.limit * 1 || 100;
+  const skip = (page - 1) * limit;
+  query = query.skip(skip).limit(limit);
+
+  const listings = await query;
+  res.status(200).json({
+    status: "success",
+    results: listings.length,
+    data: {
+      listings,
+    },
+  });
+});
+
 const getMyListings = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const listings = await Listing.find({ listedBy: userId });
@@ -122,4 +188,5 @@ module.exports = {
   getMyListings,
   deleteListing,
   updateListing,
+  getAllListings,
 };
