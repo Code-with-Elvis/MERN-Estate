@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { MdOutlineClose } from "react-icons/md";
+import { FilterIcon } from "lucide-react";
 
 const filterSchema = z.object({
   category: z.enum(["house", "villa", "studio", "duplex", "farm", "land"]),
@@ -34,6 +36,7 @@ const Filter = () => {
   const [value, setValue] = useState([50000, 5000000]); // Default to $50K - $5M
   const location = useLocation();
   const navigate = useNavigate();
+  const [showFilters, setShowFilters] = useState(false);
 
   const { handleSubmit, control, reset } = useForm({
     resolver: zodResolver(filterSchema),
@@ -118,9 +121,23 @@ const Filter = () => {
 
   return (
     <aside className="md:w-70 mb-4 rounded-xl md:rounded-none md:mb-0 md:sticky shrink-0 top-0 bg-gray-100 p-4">
-      <SearchForm />
+      <div className="flex md:block items-center gap-2 mb-4">
+        <SearchForm />
+        <Button
+          variant="outline"
+          className="md:hidden"
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          {showFilters ? <FilterIcon /> : <MdOutlineClose className="size-5" />}
+        </Button>
+      </div>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={`${
+          showFilters ? "max-[768px]:block" : "max-[768px]:hidden"
+        }`}
+      >
         {/* Category Field */}
         <div className="mb-3">
           <h4 className="mb-2 text-xs ml-1 font-semibold uppercase ">

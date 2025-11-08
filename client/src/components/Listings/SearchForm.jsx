@@ -34,12 +34,13 @@ const SearchForm = () => {
   };
 
   return (
-    <form className="mb-4" onSubmit={handleSubmit}>
+    <form className=" flex-1" onSubmit={handleSubmit}>
       <InputGroup className="border-border">
         <InputGroupInput
           placeholder="Find properties near you..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="max-[768px]:placeholder:text-sm"
         />
 
         <InputGroupAddon align="inline-end" className="pr-2">
