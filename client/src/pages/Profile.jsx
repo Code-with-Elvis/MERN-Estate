@@ -91,7 +91,7 @@ const Profile = () => {
           >
             <Card className="p-0 gap-0 bg-transparent border-0">
               <CardHeader className="p-0 overflow-hidden relative">
-                <div className="bg-background min-h-20 rounded-xl overflow-hidden">
+                <div className="bg-gray-100 min-h-20 rounded-xl overflow-hidden">
                   <img
                     src={listing.images[0]}
                     alt={listing.title}
