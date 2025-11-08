@@ -253,7 +253,8 @@ const List = () => {
             <Card className="mt-2 shadow-[0_4px_14px_0_rgba(0,0,0,0.1)]">
               <CardHeader>
                 <p className="text-2xl font-extrabold">
-                  ${priceDiscount.toLocaleString()} - ${price.toLocaleString()}
+                  {priceDiscount && ` $${priceDiscount.toLocaleString()} -`} $
+                  {price.toLocaleString()}
                 </p>
                 <p className="text-sm font-medium text-muted-foreground">
                   <span className="text-foreground font-semibold">
