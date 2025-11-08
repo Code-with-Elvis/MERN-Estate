@@ -181,7 +181,7 @@ const List = () => {
 
         <div className=" md:mt-8  grid grid-cols-1 md:grid-cols-[3fr_1.5fr] gap-5 md:gap-8">
           <article className="">
-            <h1 className=" text-lg sm:text-xl capitalize font-bold">
+            <h1 className="mt-4 md:mt-0 text-lg sm:text-xl capitalize font-bold">
               {title}
             </h1>
             <div className="mt-2 flex items-center gap-2">
@@ -275,7 +275,12 @@ const List = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button className="w-full uppercase ">Contact Owner</Button>
+                <Button
+                  disabled={createdByMe}
+                  className="w-full uppercase disabled:cursor-not-allowed"
+                >
+                  Contact Owner
+                </Button>
               </CardFooter>
             </Card>
           </aside>
