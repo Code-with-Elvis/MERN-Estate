@@ -12,6 +12,8 @@ import HomeApartment from "../assets/home-apartment.png";
 import HomeVilla from "../assets/home-villa.png";
 import HomeCommercial from "../assets/home-commercial.png";
 import HomeLand from "../assets/home-land.png";
+import HomeHouse from "../assets/home-house.png";
+import HomeDuplex from "../assets/home-duplex.png";
 
 const heroTags = [
   {
@@ -55,6 +57,11 @@ const heroTags = [
 const homeInterest = [
   {
     id: nanoid(),
+    category: "Houses",
+    imageUrl: HomeHouse,
+  },
+  {
+    id: nanoid(),
     category: "Apartments",
     imageUrl: HomeApartment,
   },
@@ -72,6 +79,11 @@ const homeInterest = [
     id: nanoid(),
     category: "Land",
     imageUrl: HomeLand,
+  },
+  {
+    id: nanoid(),
+    category: "Duplexes",
+    imageUrl: HomeDuplex,
   },
 ];
 
