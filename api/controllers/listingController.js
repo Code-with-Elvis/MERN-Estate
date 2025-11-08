@@ -63,7 +63,7 @@ const getAllListings = catchAsync(async (req, res, next) => {
   // 1.a) == Filtering ==
 
   const queryObj = { ...req.query };
-  const excludedFields = ["page", "sort", "limit", "fields", "search"];
+  const excludedFields = ["page", "sort", "limit", "fields", "search", "q"];
   excludedFields.forEach((el) => delete queryObj[el]);
 
   // 1.b) == Advanced Filtering ==
@@ -108,19 +108,17 @@ const getAllListings = catchAsync(async (req, res, next) => {
     }
   });
 
-  let query = Listing.find(processedQuery);
-
   // 1.c) == Text Search ==
-
   if (req.query.q) {
     const searchTerm = req.query.q;
+    // Combine filters with text search
+    processedQuery.$text = { $search: searchTerm };
+  }
 
-    // Use MongoDB text search for better performance
-    query = query.find({
-      $text: { $search: searchTerm },
-    });
+  let query = Listing.find(processedQuery);
 
-    // Add text search score for relevance sorting
+  // Add text search score for relevance sorting if searching
+  if (req.query.q) {
     query = query.select({ score: { $meta: "textScore" } });
   }
 
