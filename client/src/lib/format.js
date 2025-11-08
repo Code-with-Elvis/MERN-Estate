@@ -40,4 +40,16 @@ const timeAgo = (dateString) => {
   return years === 1 ? "1 year ago" : `${years} years ago`;
 };
 
-export { timeAgo };
+const formatPrice = (price) => {
+  if (price >= 1000000) {
+    const millions = price / 1000000;
+    return millions % 1 === 0 ? `${millions}M` : `${millions.toFixed(1)}M`;
+  } else if (price >= 1000) {
+    const thousands = price / 1000;
+    return thousands % 1 === 0 ? `${thousands}K` : `${thousands.toFixed(1)}K`;
+  } else {
+    return price.toString();
+  }
+};
+
+export { timeAgo, formatPrice };

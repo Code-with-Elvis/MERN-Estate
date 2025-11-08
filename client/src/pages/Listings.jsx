@@ -66,7 +66,7 @@ const Listings = () => {
         <div className="container pt-6 flex items-start">
           <Filter />
           <div className="flex-1 p-4">
-            <p className="mt-8">You have no listings yet.</p>
+            <p className="mt-8 text-center">No listings found.</p>
           </div>
         </div>
       </section>

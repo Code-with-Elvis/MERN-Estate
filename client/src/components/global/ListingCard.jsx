@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Star } from "lucide-react";
 import { Link } from "react-router-dom";
+import FavoriteBtn from "./FavoriteBtn";
 
 const ListingCard = ({ _id, title, price, images, slug, ratingsAverage }) => {
   return (
@@ -10,6 +11,7 @@ const ListingCard = ({ _id, title, price, images, slug, ratingsAverage }) => {
           <div className="bg-gray-100 min-h-20 rounded-xl overflow-hidden">
             <img src={images[0]} alt={title} className="w-full" />
           </div>
+          <FavoriteBtn listingId={_id} />
         </CardHeader>
         <CardContent className="px-2.5 py-2 pt-0">
           <h3 className="font-medium">{title}</h3>
