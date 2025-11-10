@@ -69,8 +69,8 @@ const Profile = () => {
       <section className="md:py-8">
         <Header />
 
-        <div className="mt-5">
-          <p className="mt-8">You have no listings yet.</p>
+        <div className="mt-14">
+          <p className=" text-center">You have no listings yet.</p>
         </div>
       </section>
     );
