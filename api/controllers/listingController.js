@@ -160,6 +160,18 @@ const getAllListings = catchAsync(async (req, res, next) => {
   });
 });
 
+const getRecentListings = catchAsync(async (req, res, next) => {
+  // === Fetch only 4 ===
+  const listings = await Listing.find().sort("-createdAt").limit(4);
+  res.status(200).json({
+    status: "success",
+    results: listings.length,
+    data: {
+      listings,
+    },
+  });
+});
+
 const getMyListings = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const listings = await Listing.find({ listedBy: userId });
@@ -224,4 +236,5 @@ module.exports = {
   deleteListing,
   updateListing,
   getAllListings,
+  getRecentListings,
 };
