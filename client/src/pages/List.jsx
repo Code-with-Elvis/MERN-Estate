@@ -114,7 +114,7 @@ const List = () => {
       <div className="hidden sm:block h-12 bg-[#222]"></div>
       <div className="container pt-10">
         <header className="flex items-center justify-between">
-          <Badge className="py-1 px-4 rounded-md uppercase bg-foreground text-background">
+          <Badge className="py-1 px-4 hidden sm:block rounded-md uppercase bg-foreground text-background">
             {category}
           </Badge>
 
