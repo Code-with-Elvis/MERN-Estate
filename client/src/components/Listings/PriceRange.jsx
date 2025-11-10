@@ -36,7 +36,7 @@ function FieldSlider({ setValue, value }) {
           Price Range
         </FieldTitle>
         <FieldDescription>
-          Your budget range is ($
+          Budget range: ($
           <span className="font-medium tabular-nums">
             {formatPrice(value[0])}
           </span>{" "}
