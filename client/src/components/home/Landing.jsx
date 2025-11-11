@@ -12,7 +12,7 @@ const Landing = () => {
       <div className="px-0 lg:px-8 container z-20 relative">
         <div
           style={{ backgroundImage: `url(${heroImg})` }}
-          className="min-h-80 bg-no-repeat bg-cover lg:rounded-b-xl overflow-hidden relative"
+          className="min-h-80 bg-no-repeat bg-cover  overflow-hidden relative"
         >
           <div className="absolute inset-0 z-10 bg-black/60"></div>
           <div className="relative z-20 text-white">
