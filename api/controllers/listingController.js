@@ -1,6 +1,35 @@
 const Listing = require("../modals/listingModal");
+const Favorite = require("../modals/favoriteModal");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+
+// === Helper function to add isFavorite field to listings ===
+const addFavoriteStatus = async (listings, userId) => {
+  if (!userId) {
+    // == If no user is logged in, set isFavorite to false for all listings
+    return listings.map((listing) => ({
+      ...listing.toObject(),
+      isFavorite: false,
+    }));
+  }
+
+  // == Get all favorites for this user for the given listings
+  const listingIds = listings.map((listing) => listing._id);
+  const favorites = await Favorite.find({
+    user: userId,
+    listing: { $in: listingIds },
+  }).select("listing");
+
+  const favoriteListingIds = new Set(
+    favorites.map((fav) => fav.listing.toString())
+  );
+
+  // == Add isFavorite field to each listing
+  return listings.map((listing) => ({
+    ...listing.toObject(),
+    isFavorite: favoriteListingIds.has(listing._id.toString()),
+  }));
+};
 
 const createListing = catchAsync(async (req, res, next) => {
   // === Get user ID from authenticated user ===
@@ -151,11 +180,16 @@ const getAllListings = catchAsync(async (req, res, next) => {
   query = query.skip(skip).limit(limit);
 
   const listings = await query;
+
+  // Add favorite status for authenticated users
+  const userId = req.user?.id; // Optional chaining for when user might not be authenticated
+  const listingsWithFavorites = await addFavoriteStatus(listings, userId);
+
   res.status(200).json({
     status: "success",
     results: listings.length,
     data: {
-      listings,
+      listings: listingsWithFavorites,
     },
   });
 });
@@ -163,11 +197,16 @@ const getAllListings = catchAsync(async (req, res, next) => {
 const getRecentListings = catchAsync(async (req, res, next) => {
   // === Fetch only 4 ===
   const listings = await Listing.find().sort("-createdAt").limit(4);
+
+  // Add favorite status for authenticated users
+  const userId = req.user?.id;
+  const listingsWithFavorites = await addFavoriteStatus(listings, userId);
+
   res.status(200).json({
     status: "success",
     results: listings.length,
     data: {
-      listings,
+      listings: listingsWithFavorites,
     },
   });
 });
@@ -175,11 +214,15 @@ const getRecentListings = catchAsync(async (req, res, next) => {
 const getMyListings = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const listings = await Listing.find({ listedBy: userId });
+
+  // Add favorite status (user's own listings can also be favorited)
+  const listingsWithFavorites = await addFavoriteStatus(listings, userId);
+
   res.status(200).json({
     status: "success",
     results: listings.length,
     data: {
-      listings,
+      listings: listingsWithFavorites,
     },
   });
 });
@@ -198,10 +241,15 @@ const getListing = catchAsync(async (req, res, next) => {
   if (!listing) {
     return next(new AppError("No listing found with that slug", 404));
   }
+
+  // Add favorite status for authenticated users
+  const userId = req.user?.id;
+  const listingsWithFavorites = await addFavoriteStatus([listing], userId);
+
   res.status(200).json({
     status: "success",
     data: {
-      listing,
+      listing: listingsWithFavorites[0],
     },
   });
 });

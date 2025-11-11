@@ -2,6 +2,7 @@ const express = require("express");
 const userRouter = require("./routes/userRoute");
 const listingRouter = require("./routes/listingRoute");
 const reviewRouter = require("./routes/reviewRoute");
+const favoriteRouter = require("./routes/favoriteRoute");
 const globalErrorHandler = require("./controllers/errorController");
 const cookieParser = require("cookie-parser");
 const path = require("path");
@@ -15,6 +16,7 @@ app.use(cookieParser());
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/listings", listingRouter);
 app.use("/api/v1/reviews", reviewRouter);
+app.use("/api/v1/favorites", favoriteRouter);
 
 // SERVE STATIC FILES IN PRODUCTION
 if (process.env.NODE_ENV === "production") {
