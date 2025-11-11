@@ -164,7 +164,7 @@ const protectOptional = catchAsync(async (req, res, next) => {
     token = req.cookies.jwt;
   }
 
-  // ✅ If no token, just continue without user
+  // === If no token, just continue without user ===
   if (!token) {
     return next();
   }

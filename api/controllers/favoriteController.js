@@ -7,7 +7,8 @@ const toggleFavorite = catchAsync(async (req, res, next) => {
   const { listingId } = req.body;
   const userId = req.user.id; // Get from authenticated user instead of request body
 
-  // Verify that the listing exists
+  // === Verify that the listing exists ===
+
   const listing = await Listing.findById(listingId);
   if (!listing) {
     return next(new AppError("No listing found with that ID", 404));
@@ -28,6 +29,7 @@ const toggleFavorite = catchAsync(async (req, res, next) => {
   }
 
   const favorite = await Favorite.create({ user: userId, listing: listingId });
+
   res.status(201).json({
     status: "success",
     message: "Favorite added",
@@ -48,7 +50,8 @@ const getUserFavorites = catchAsync(async (req, res, next) => {
     })
     .sort("-createdAt");
 
-  // Extract the listings and add isFavorite: true to all
+  // === Extract the listings and add isFavorite: true to all ===
+
   const favoriteListings = favorites.map((fav) => ({
     ...fav.listing.toObject(),
     isFavorite: true,
