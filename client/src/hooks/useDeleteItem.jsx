@@ -27,7 +27,7 @@ const useDeleteItem = (apiUrl, queryKey, message) => {
       console.error("Error:", error?.message || "An error occurred");
       if (error?.response?.status === 401) {
         queryClient.removeQueries();
-        navigate("/login");
+        navigate("/signin");
         logout();
         toast.error(
           "You are not authorized to perform this action. Please log in."

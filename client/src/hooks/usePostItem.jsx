@@ -28,7 +28,7 @@ const usePostItem = (apiUrl, queryKey, message) => {
 
       if (error?.response?.status === 401) {
         queryClient.removeQueries();
-        navigate("/login");
+        navigate("/signin");
         logout();
         toast.error(
           "You are not authorized to perform this action. Please log in."
