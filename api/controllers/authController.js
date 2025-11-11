@@ -152,6 +152,48 @@ const protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+const protectOptional = catchAsync(async (req, res, next) => {
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
+  }
+
+  // ✅ If no token, just continue without user
+  if (!token) {
+    return next();
+  }
+
+  try {
+    // Verify token
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+    // Check if user still exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return next();
+    }
+
+    // Check if user changed password after token was issued
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return next();
+    }
+
+    // Set user if authentication successful
+    req.user = currentUser;
+  } catch (err) {
+    // If token is invalid, just continue without user
+    return next();
+  }
+
+  next();
+});
+
 const mustBeActive = catchAsync(async (req, res, next) => {
   if (!req.user.active) {
     return next(
@@ -181,4 +223,5 @@ module.exports = {
   logout,
   googleSignUp,
   mustBeActive,
+  protectOptional,
 };

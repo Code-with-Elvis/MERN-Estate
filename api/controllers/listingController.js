@@ -5,30 +5,49 @@ const AppError = require("../utils/appError");
 
 // === Helper function to add isFavorite field to listings ===
 const addFavoriteStatus = async (listings, userId) => {
+  console.log("👤 User ID:", userId);
+
   if (!userId) {
-    // == If no user is logged in, set isFavorite to false for all listings
     return listings.map((listing) => ({
       ...listing.toObject(),
       isFavorite: false,
     }));
   }
 
-  // == Get all favorites for this user for the given listings
   const listingIds = listings.map((listing) => listing._id);
   const favorites = await Favorite.find({
     user: userId,
     listing: { $in: listingIds },
   }).select("listing");
 
+  console.log("⭐ Favorites found:", favorites.length);
+
+  // ✅ More detailed logging
+  console.log(
+    "📋 Listing IDs:",
+    listingIds.map((id) => id.toString())
+  );
+  console.log(
+    "❤️ Favorite listing IDs:",
+    favorites.map((fav) => fav.listing.toString())
+  );
+
   const favoriteListingIds = new Set(
     favorites.map((fav) => fav.listing.toString())
   );
 
-  // == Add isFavorite field to each listing
-  return listings.map((listing) => ({
-    ...listing.toObject(),
-    isFavorite: favoriteListingIds.has(listing._id.toString()),
-  }));
+  return listings.map((listing) => {
+    const listingIdStr = listing._id.toString();
+    const isFav = favoriteListingIds.has(listingIdStr);
+
+    // ✅ Log each comparison
+    console.log(`Listing ${listingIdStr}: isFavorite = ${isFav}`);
+
+    return {
+      ...listing.toObject(),
+      isFavorite: isFav,
+    };
+  });
 };
 
 const createListing = catchAsync(async (req, res, next) => {
