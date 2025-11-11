@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import ListingCard from "./ListingCard";
+import CommonError from "../global/CommonError";
 
 const FeaturedListings = () => {
   const queryClient = useQueryClient();

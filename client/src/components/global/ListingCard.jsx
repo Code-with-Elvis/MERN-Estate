@@ -3,7 +3,15 @@ import { Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import FavoriteBtn from "./FavoriteBtn";
 
-const ListingCard = ({ _id, title, price, images, slug, ratingsAverage }) => {
+const ListingCard = ({
+  _id,
+  title,
+  price,
+  images,
+  slug,
+  ratingsAverage,
+  isFavorite,
+}) => {
   return (
     <Link to={`/listings/${slug}`} className="block break-inside-avoid mb-4">
       <Card className="p-0 gap-0 bg-transparent border-0">
@@ -11,7 +19,7 @@ const ListingCard = ({ _id, title, price, images, slug, ratingsAverage }) => {
           <div className="bg-gray-100 min-h-20 rounded-xl overflow-hidden">
             <img src={images[0]} alt={title} className="w-full" />
           </div>
-          <FavoriteBtn listingId={_id} />
+          <FavoriteBtn listingId={_id} isFavorite={isFavorite} />
         </CardHeader>
         <CardContent className="px-2.5 py-2 pt-0">
           <h3 className="font-medium">{title}</h3>

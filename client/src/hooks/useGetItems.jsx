@@ -9,7 +9,9 @@ const useGetItems = (apiUrl, queryKey) => {
   const { data, error, isPending } = useQuery({
     queryKey: [queryKey, apiUrl, searchParams],
     queryFn: async () => {
-      const response = await axios.get(`${apiUrl}${searchParams}`);
+      const response = await axios.get(`${apiUrl}${searchParams}`, {
+        withCredentials: true,
+      });
       return response.data;
     },
   });

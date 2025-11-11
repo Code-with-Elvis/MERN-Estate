@@ -1,7 +1,7 @@
-import { GoHeart, GoHeartFill } from "react-icons/go"; // ✅ Add filled heart
+import { GoHeart, GoHeartFill } from "react-icons/go";
 import { Button } from "../ui/button";
 import usePostItem from "@/hooks/usePostItem";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "../ui/spinner";
 
 const FavoriteBtn = ({ listingId, isFavorite }) => {
   const message = isFavorite
@@ -27,26 +27,16 @@ const FavoriteBtn = ({ listingId, isFavorite }) => {
   };
 
   return (
-    <Button
-      variant="outline"
-      size="sm"
-      onClick={handleFavorite}
-      disabled={isPending}
-      className={`absolute w-8 top-2 right-2 ${
-        isFavorite
-          ? "bg-red-50 hover:bg-red-100"
-          : "bg-transparent hover:bg-gray-100/50"
-      }`}
-    >
+    <Button variant="outline" onClick={handleFavorite} disabled={isPending}>
       {isPending ? (
         <Spinner className="size-5" />
       ) : isFavorite ? (
         <GoHeartFill className="size-5 text-primary" />
       ) : (
-        <GoHeart className="size-5 drop-shadow-[0_0_1px_#fff]" />
+        <GoHeart className="size-5" />
       )}
+      {isPending ? "Saving..." : isFavorite ? "Saved" : "Save"}
     </Button>
   );
 };
-
 export default FavoriteBtn;

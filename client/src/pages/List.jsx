@@ -21,6 +21,7 @@ import { Star } from "lucide-react";
 import { FaRegStar } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import AddReviewBtn from "@/components/Listings/AddReviewBtn";
+import FavoriteBtn from "@/components/Listings/FavoriteBtn";
 
 const List = () => {
   const queryClient = useQueryClient();
@@ -101,6 +102,7 @@ const List = () => {
     tags,
     ratingsAverage,
     createdAt,
+    isFavorite,
   } = listing;
 
   const otherImages = images.slice(1);
@@ -123,10 +125,7 @@ const List = () => {
               <IoShareSocialOutline className="size-5" />
               Share
             </Button>
-            <Button variant="outline">
-              <GoHeart className="size-5" />
-              Save
-            </Button>
+            <FavoriteBtn listingId={_id} isFavorite={isFavorite} />
             {createdByMe && (
               <Button>
                 <Link to={`/listings/${slug}/edit-details`}>Edit</Link>
