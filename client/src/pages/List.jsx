@@ -107,9 +107,9 @@ const List = () => {
 
   const otherImages = images.slice(1);
   const hasAddedReview = reviews.some(
-    (review) => review.user._id === user?._id
+    (review) => review.user?._id === user?._id
   );
-  const createdByMe = listedBy._id === user?._id;
+  const createdByMe = listedBy?._id === user?._id;
 
   return (
     <section className="pb-14">
