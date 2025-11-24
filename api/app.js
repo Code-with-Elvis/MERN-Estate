@@ -7,9 +7,26 @@ const globalErrorHandler = require("./controllers/errorController");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const cors = require("cors");
-
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const mongoSanitize = require("express-mongo-sanitize");
+const { xss } = require("express-xss-sanitizer");
+const hpp = require("hpp");
 
 const app = express();
+
+// SET SECURE HTTP HEADERS
+app.use(helmet());
+
+// LIMIT REQUEST BODY SIZE
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: "Too many requests from this IP, please try again in an hour!",
+});
+app.use("/api", limiter);
+
+// BODY PARSER AND CORS MIDDLEWARE
 
 app.use(express.json());
 app.use(
@@ -19,6 +36,24 @@ app.use(
   })
 );
 app.use(cookieParser());
+
+// DATA SANITIZATION MIDDLEWARES
+// app.use((req, res, next) => {
+//   if (req.body && typeof req.body === "object") {
+//     mongoSanitize()(req, res, next);
+//   } else {
+//     next();s
+//   }
+// });
+// app.use(mongoSanitize());
+app.use(xss());
+
+// PREVENT PARAMETER POLLUTION
+app.use(
+  hpp({
+    whitelist: [],
+  })
+);
 
 // ROUTES
 app.use("/api/v1/users", userRouter);
