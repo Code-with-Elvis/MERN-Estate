@@ -8,7 +8,7 @@ import "swiper/css";
 const FindInterest = () => {
   return (
     <section>
-      <div className="container max-[600px]:pr-0 pb-12 pt-8">
+      <div className="container max-[600px]:pr-0 pb-6 pt-8">
         <Swiper
           spaceBetween={20}
           slidesPerView={3}
