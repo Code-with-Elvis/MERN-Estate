@@ -1,6 +1,9 @@
 const User = require("../modals/userModal");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+const Listing = require("../modals/listingModal");
+const Review = require("../modals/reviewModal");
+const Favorite = require("../modals/favoriteModal");
 
 const getAllUsers = async (req, res) => {
   try {
@@ -119,6 +122,26 @@ const deleteMe = catchAsync(async (req, res, next) => {
   if (!(await user.correctPassword(password, user.password))) {
     return next(new AppError("Your password is incorrect.", 400));
   }
+
+  // === Delete user's listings ===
+  await Listing.deleteMany({ listedBy: req.user.id });
+
+  // === Get all reviews by user to recalculate affected listings ===
+  const userReviews = await Review.find({ user: req.user.id });
+  const affectedListingIds = [
+    ...new Set(userReviews.map((review) => review.listing)),
+  ];
+
+  // === Delete user's reviews ===
+  await Review.deleteMany({ user: req.user.id });
+
+  // === Recalculate ratings for affected listings ===
+  for (const listingId of affectedListingIds) {
+    await Review.calcAverageRatings(listingId);
+  }
+
+  // === Delete user's favorites ===
+  await Favorite.deleteMany({ user: req.user.id });
 
   // === Delete user ===
 

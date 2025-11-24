@@ -1,5 +1,6 @@
 const Listing = require("../modals/listingModal");
 const Favorite = require("../modals/favoriteModal");
+const Review = require("../modals/reviewModal");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
@@ -271,6 +272,13 @@ const deleteListing = catchAsync(async (req, res, next) => {
     );
   }
 
+  // === Delete all favorites for this listing ===
+  await Favorite.deleteMany({ listing: listingId });
+
+  // === Delete all reviews for this listing ===
+  await Review.deleteMany({ listing: listingId });
+
+  // === Delete the listing ===
   await Listing.findByIdAndDelete(listingId);
 
   res.status(204).json({
